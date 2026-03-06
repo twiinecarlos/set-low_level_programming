@@ -1,2 +1,2 @@
 #!/bin/bash
-ccp -E "$CFILE" -o c
+cpp -E "$CFILE" -o c
