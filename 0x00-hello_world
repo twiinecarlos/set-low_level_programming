@@ -1,4 +1,6 @@
-chmod +x 0-preprocessor
-export CFILE=0-main.c
-./0-preprocessor
-tail c
+#include <stdio.h>
+int main(void)
+{
+    printf("Hello, Holberton\n");
+    return (0);
+}
