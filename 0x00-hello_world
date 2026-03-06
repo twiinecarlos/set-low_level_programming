@@ -4,3 +4,7 @@ int main(void)
     printf("Hello, Holberton\n");
     return (0);
 }
+
+export CFILE=0-main.c
+./0-preprocessor
+tail c
