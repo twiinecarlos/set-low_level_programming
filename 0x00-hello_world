@@ -1,1 +1,12 @@
 
+#!/bin/bash
+# 0-preprocessor - Run a C file through the preprocessor and save output to 'c'
+
+# Check if $CFILE is set
+if [ -z "$CFILE" ]; then
+    echo "Error: CFILE variable is not set."
+    exit 1
+fi
+
+# Run the preprocessor and save output to 'c'
+gcc -E "$CFILE" -o c
