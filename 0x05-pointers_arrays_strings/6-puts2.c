@@ -1,14 +1,18 @@
-#ifndef MAIN_H
-#define MAIN_H
+#include "main.h"
 
-int _putchar(char c);
+/**
+ * puts2 - prints every other character of a string
+ * @str: pointer to string
+ */
+void puts2(char *str)
+{
+	int i = 0;
 
-void reset_to_98(int *n);
-void swap_int(int *a, int *b);
-int _strlen(char *s);
-void _puts(char *str);
-void print_rev(char *s);
-void rev_string(char *s);
-void puts2(char *str);
+	while (str[i] != '\0')
+	{
+		_putchar(str[i]);
+		i += 2;
+	}
 
-#endif
+	_putchar('\n');
+}
