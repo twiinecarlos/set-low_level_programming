@@ -6,7 +6,9 @@
 /**
  * struct listint_s - singly linked list of integers
  * @n: integer value
- * @next: points to next node
+ * @next: points to the next node
+ *
+ * Description: singly linked list node structure for integers
  */
 typedef struct listint_s
 {
@@ -14,7 +16,8 @@ typedef struct listint_s
 	struct listint_s *next;
 } listint_t;
 
-/* function prototype */
+/* function prototypes */
 size_t print_listint(const listint_t *h);
+size_t listint_len(const listint_t *h);
 
 #endif
