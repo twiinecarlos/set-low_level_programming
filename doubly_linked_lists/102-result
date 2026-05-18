@@ -1,2 +1,2 @@
-
-906609
+printf "906609" > 102-result
+wc -c 102-result  # should say 6
