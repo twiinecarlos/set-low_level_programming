@@ -26,6 +26,32 @@ char *my_strdup(const char *str)
 }
 
 /**
+ * update_existing - updates the value of an existing key in the list
+ * @head: head of the linked list at the target index
+ * @key: the key to search for
+ * @value_copy: the new (already duplicated) value to assign
+ *
+ * Return: 1 if the key was found and updated, 0 otherwise
+ */
+int update_existing(hash_node_t *head, const char *key, char *value_copy)
+{
+	hash_node_t *current;
+
+	current = head;
+	while (current != NULL)
+	{
+		if (strcmp(current->key, key) == 0)
+		{
+			free(current->value);
+			current->value = value_copy;
+			return (1);
+		}
+		current = current->next;
+	}
+	return (0);
+}
+
+/**
  * hash_table_set - adds an element to the hash table
  * @ht: the hash table
  * @key: the key (cannot be an empty string)
@@ -37,7 +63,6 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 {
 	unsigned long int index;
 	hash_node_t *new_node;
-	hash_node_t *current;
 	char *value_copy;
 
 	if (ht == NULL || key == NULL || *key == '\0' || value == NULL)
@@ -48,18 +73,9 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 		return (0);
 
 	index = key_index((const unsigned char *)key, ht->size);
-	current = ht->array[index];
 
-	while (current != NULL)
-	{
-		if (strcmp(current->key, key) == 0)
-		{
-			free(current->value);
-			current->value = value_copy;
-			return (1);
-		}
-		current = current->next;
-	}
+	if (update_existing(ht->array[index], key, value_copy))
+		return (1);
 
 	new_node = malloc(sizeof(hash_node_t));
 	if (new_node == NULL)
