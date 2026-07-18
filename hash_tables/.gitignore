@@ -1,0 +1,10 @@
+*.o
+*.out
+sht
+e
+f
+g
+b
+c
+d
+__pycache__/
