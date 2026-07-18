@@ -1,12 +1,14 @@
 #ifndef HASH_TABLES_H
 #define HASH_TABLES_H
 
+#include <stddef.h>
+
 /**
- * struct hash_node_s - Hash table node
+ * struct hash_node_s - node of a hash table
  *
- * @key: key of the node
- * @value: value of the node
- * @next: pointer to next node
+ * @key: key
+ * @value: value
+ * @next: next node
  */
 typedef struct hash_node_s
 {
@@ -16,10 +18,10 @@ typedef struct hash_node_s
 } hash_node_t;
 
 /**
- * struct hash_table_s - Hash table data structure
+ * struct hash_table_s - hash table
  *
- * @size: size of the array
- * @array: array of hash nodes
+ * @size: size
+ * @array: array
  */
 typedef struct hash_table_s
 {
@@ -29,13 +31,13 @@ typedef struct hash_table_s
 
 
 /**
- * struct shash_node_s - Sorted hash table node
+ * struct shash_node_s - sorted hash node
  *
- * @key: key of the node
- * @value: value of the node
- * @next: next node in hash table chain
- * @sprev: previous node in sorted list
- * @snext: next node in sorted list
+ * @key: key
+ * @value: value
+ * @next: next node
+ * @sprev: previous sorted node
+ * @snext: next sorted node
  */
 typedef struct shash_node_s
 {
@@ -48,12 +50,12 @@ typedef struct shash_node_s
 
 
 /**
- * struct shash_table_s - Sorted hash table
+ * struct shash_table_s - sorted hash table
  *
- * @size: size of the array
- * @array: array of hash nodes
- * @shead: first node of sorted list
- * @stail: last node of sorted list
+ * @size: size
+ * @array: array
+ * @shead: sorted head
+ * @stail: sorted tail
  */
 typedef struct shash_table_s
 {
@@ -64,45 +66,21 @@ typedef struct shash_table_s
 } shash_table_t;
 
 
-/* Hash table functions */
-
-hash_table_t *hash_table_create(unsigned long int size);
-
-int hash_table_set(hash_table_t *ht,
-		const char *key,
-		const char *value);
-
-char *hash_table_get(const hash_table_t *ht,
-		const char *key);
-
-void hash_table_print(const hash_table_t *ht);
-
-void hash_table_delete(hash_table_t *ht);
-
-
-/* Hash functions */
-
+/* Normal hash table functions */
 unsigned long int hash_djb2(const unsigned char *str);
-
 unsigned long int key_index(const unsigned char *key,
-		unsigned long int size);
+			    unsigned long int size);
 
 
 /* Sorted hash table functions */
-
 shash_table_t *shash_table_create(unsigned long int size);
-
 int shash_table_set(shash_table_t *ht,
-		const char *key,
-		const char *value);
-
+		    const char *key,
+		    const char *value);
 char *shash_table_get(const shash_table_t *ht,
-		const char *key);
-
+		      const char *key);
 void shash_table_print(const shash_table_t *ht);
-
 void shash_table_print_rev(const shash_table_t *ht);
-
 void shash_table_delete(shash_table_t *ht);
 
 #endif
