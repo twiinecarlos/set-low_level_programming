@@ -2,59 +2,50 @@
 #include <stdlib.h>
 #include <string.h>
 
-char charset[] = "A-CHRDw87lNS0E9B2TibgpnMVys5XzvtOGJcYLU+4mjW6fxqZeF3Qa1rPhdKIouk";
-
-int f1(int len)
+/**
+ * compute_index - computes one index (0-63) into the key charset,
+ * using one of six algorithms selected by mode, matching the
+ * behaviour of the original crackme5 binary
+ * @username: the username string
+ * @len: length of the username
+ * @mode: which algorithm to run (1 through 6)
+ *
+ * Return: an index between 0 and 63
+ */
+int compute_index(char *username, int len, int mode)
 {
-	return ((len ^ 0x3b) & 0x3f);
-}
+	int i, sum, product, max, val, c;
 
-int f2(char *username, int len)
-{
-	int i, sum = 0;
-
-	for (i = 0; i < len; i++)
-		sum += (int)username[i];
-	return ((sum ^ 0x4f) & 0x3f);
-}
-
-int f3(char *username, int len)
-{
-	int i, product = 1;
-
-	for (i = 0; i < len; i++)
-		product *= (int)username[i];
-	return ((product ^ 0x55) & 0x3f);
-}
-
-int f4(char *username, int len)
-{
-	int i, max;
-
-	max = (int)username[0];
-	for (i = 0; i < len; i++)
+	if (mode == 1)
+		return ((len ^ 0x3b) & 0x3f);
+	if (mode == 2)
 	{
-		if ((int)username[i] > max)
-			max = (int)username[i];
+		for (sum = 0, i = 0; i < len; i++)
+			sum += (int)username[i];
+		return ((sum ^ 0x4f) & 0x3f);
 	}
-	srand(max ^ 0xe);
-	return (rand() & 0x3f);
-}
-
-int f5(char *username, int len)
-{
-	int i, sum = 0;
-
-	for (i = 0; i < len; i++)
-		sum += (int)username[i] * (int)username[i];
-	return ((sum ^ 0xef) & 0x3f);
-}
-
-int f6(int c)
-{
-	int i, val = 0;
-
-	for (i = 0; c > i; i++)
+	if (mode == 3)
+	{
+		for (product = 1, i = 0; i < len; i++)
+			product *= (int)username[i];
+		return ((product ^ 0x55) & 0x3f);
+	}
+	if (mode == 4)
+	{
+		for (max = (int)username[0], i = 0; i < len; i++)
+			if ((int)username[i] > max)
+				max = (int)username[i];
+		srand(max ^ 0xe);
+		return (rand() & 0x3f);
+	}
+	if (mode == 5)
+	{
+		for (sum = 0, i = 0; i < len; i++)
+			sum += (int)username[i] * (int)username[i];
+		return ((sum ^ 0xef) & 0x3f);
+	}
+	c = (int)(signed char)username[0];
+	for (val = 0, i = 0; c > i; i++)
 		val = rand();
 	return ((val ^ 0xe5) & 0x3f);
 }
@@ -68,8 +59,10 @@ int f6(int c)
  */
 int main(int argc, char **argv)
 {
+	char charset[] =
+		"A-CHRDw87lNS0E9B2TibgpnMVys5XzvtOGJcYLU+4mjW6fxqZeF3Qa1rPhdKIouk";
 	char *username;
-	int len;
+	int len, mode;
 	char key[7];
 
 	if (argc != 2)
@@ -81,12 +74,8 @@ int main(int argc, char **argv)
 	username = argv[1];
 	len = strlen(username);
 
-	key[0] = charset[f1(len)];
-	key[1] = charset[f2(username, len)];
-	key[2] = charset[f3(username, len)];
-	key[3] = charset[f4(username, len)];
-	key[4] = charset[f5(username, len)];
-	key[5] = charset[f6((int)(signed char)username[0])];
+	for (mode = 1; mode <= 6; mode++)
+		key[mode - 1] = charset[compute_index(username, len, mode)];
 	key[6] = '\0';
 
 	printf("%s\n", key);
