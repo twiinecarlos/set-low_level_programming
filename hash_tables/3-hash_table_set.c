@@ -3,12 +3,50 @@
 #include <string.h>
 
 /**
- * hash_table_set - adds an element to a hash table
- * @ht: hash table
- * @key: key of the element
- * @value: value associated with the key
+ * create_node - creates a new hash node
+ * @key: key of node
+ * @value: value of node
  *
- * Return: 1 if it succeeded, 0 otherwise
+ * Return: pointer to new node or NULL
+ */
+hash_node_t *create_node(const char *key, const char *value)
+{
+	hash_node_t *node;
+
+	node = malloc(sizeof(hash_node_t));
+
+	if (node == NULL)
+		return (NULL);
+
+	node->key = strdup(key);
+
+	if (node->key == NULL)
+	{
+		free(node);
+		return (NULL);
+	}
+
+	node->value = strdup(value);
+
+	if (node->value == NULL)
+	{
+		free(node->key);
+		free(node);
+		return (NULL);
+	}
+
+	node->next = NULL;
+
+	return (node);
+}
+
+/**
+ * hash_table_set - adds an element to the hash table
+ * @ht: hash table
+ * @key: key
+ * @value: value associated with key
+ *
+ * Return: 1 if succeeded, 0 otherwise
  */
 int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 {
@@ -43,30 +81,12 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 		current = current->next;
 	}
 
-	new_node = malloc(sizeof(hash_node_t));
+	new_node = create_node(key, value);
 
 	if (new_node == NULL)
 		return (0);
 
-	new_node->key = strdup(key);
-
-	if (new_node->key == NULL)
-	{
-		free(new_node);
-		return (0);
-	}
-
-	new_node->value = strdup(value);
-
-	if (new_node->value == NULL)
-	{
-		free(new_node->key);
-		free(new_node);
-		return (0);
-	}
-
 	new_node->next = ht->array[index];
-
 	ht->array[index] = new_node;
 
 	return (1);
