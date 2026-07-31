@@ -2,8 +2,10 @@
 #include <stdlib.h>
 
 /**
- * shash_table_delete - deletes sorted hash table
- * @ht: sorted hash table
+ * shash_table_delete - deletes a sorted hash table
+ * @ht: sorted hash table to delete
+ *
+ * Return: Nothing
  */
 void shash_table_delete(shash_table_t *ht)
 {
@@ -15,7 +17,7 @@ void shash_table_delete(shash_table_t *ht)
 
 	node = ht->shead;
 
-	while (node)
+	while (node != NULL)
 	{
 		next = node->snext;
 
